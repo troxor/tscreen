@@ -1,0 +1,130 @@
+tscreen (0.5.0-1) XXX; urgency=low
+
+  *
+
+ -- Steve Kemp <steve@steve.org.uk>  Thu, 1 Jan 2008 14:15:16 +0000
+
+tscreen (0.4.9-1) unstable; urgency=medium
+
+  * Updated the output for "tscreen -v" to include a link to the homepage.
+  * Added new flag '-V' to show compiled-in options, & etc.
+  * Minor compilation fixups for Mac OS X.
+
+ -- Steve Kemp <steve@steve.org.uk>  Tue, 23 Dec 2008 04:44:40 +0000
+
+tscreen (0.4.8-1) unstable; urgency=medium
+
+  * Display the keybindings on the caption in a consistant fashion.
+  * If defining an alias and one with that name already exists silently
+    remove the old one, rather than complaining and aborting.
+  * Default to -O when building.
+  * Updated the source primitive to ignore the executable bit.  Instead
+    we'll execute things if called via "source path/to/file|".  For example
+    if -x ~/.tscreen.dynamic  'source ~/.tscreen.dynamic|'
+  * Reduced some static buffers to reduce memory size.
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 31 Oct 2008 10:00:01 +0000
+
+tscreen (0.4.7-1) unstable; urgency=low
+
+  * Explicitly bind "q" to "quit" because we advertise that in the
+    default caption-string.
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 24 Oct 2008 20:00:02 +0000
+
+tscreen (0.4.7-0) unstable; urgency=low
+
+  * If ~/.tscreenrc is executable it will be executed and the output
+    processed for commands, instead of being read normally.  This allows
+    *real* conditionals above and beyond those present in the "if" primitive.
+  * Install /etc/bash_completion.d/tscreen to complete on re-attach, etc.
+  * Minor Debian package cleanup.
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 24 Oct 2008 20:00:02 +0000
+
+tscreen (0.4.6-1) unstable; urgency=low
+
+  * Added new primitive "unaliasall"
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 24 Oct 2008 12:12:12 +0000
+
+tscreen (0.4.5-1) unstable; urgency=high
+
+  * Fixed issue with colour on the statusbar.
+  * Added init script.
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 24 Oct 2008 15:15:15 +0000
+
+tscreen (0.4.4-1) unstable; urgency=medium
+
+  * The attributes (color and/or bold/blink etc) can be set using the
+    %B command. An example hardstatus string would look like:
+          "%B{r}%-Lw %{g}%t%{-} %+Lw"
+     - file#15947 http://savannah.gnu.org/bugs/?18382
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 24 Oct 2008 10:33:01 +0000
+
+tscreen (0.4.3-1) unstable; urgency=medium
+
+  * Allow usernames up to 50 characters long:
+     - http://savannah.gnu.org/bugs/?21653
+  * Use calloc not malloc + bzero:
+     - http://git.savannah.gnu.org/gitweb/?p=screen.git;a=commit;h=953493f7087bf1e2996441558fa5d7260890c6a6
+
+ -- Steve Kemp <steve@steve.org.uk>  Thu, 23 Oct 2008 22:44:22 +0000
+
+tscreen (0.4.2-2) low; urgency=medium
+
+  * Added some cleanups for alias handling from Sadrul Habib Chowdhury.
+
+ -- Steve Kemp <steve@steve.org.uk>  Wed, 22 Oct 2008 21:00:12 +0000
+
+tscreen (0.4.1-1) unstable; urgency=high
+
+  * `if` primitive updated to allow `backticks`.
+
+ -- Steve Kemp <steve@steve.org.uk>  Tue, 21 Oct 2008 22:22:22 +0000
+
+tscreen (0.4.0-1) unstable; urgency=high
+
+  * Offer TAB-completion of alias names too.
+  * Revert change to allow binding to alias names directly, the memory
+    changes when new aliases are defined makes this impractical.
+  * New "if" primitive.
+
+ -- Steve Kemp <steve@steve.org.uk>  Tue, 21 Oct 2008 14:44:41 +0000
+
+tscreen (0.3.0-1) unstable; urgency=low
+
+  * Correctly create /var/run/tscreen at install time.
+  * "bind [key] [aliasname]" works correctly, without the need for eval.
+  * New primitive "hide":
+    -  http://lists.gnu.org/archive/html/screen-devel/2006-03/msg00001.html
+  * New flag "-F" to screen - allow findorcreate to work:
+    -  http://lists.gnu.org/archive/html/screen-devel/2007-06/msg00012.html
+  * Alias-removal is more reliable.
+
+ -- Steve Kemp <steve@steve.org.uk>  Sun, 19 Oct 2008 18:19:20 +0000
+
+tscreen (0.2.0-2) unstable; urgency=low
+
+  * Allow long termcap names; Debian bug #491812.
+  * Bump MAXWIN to 100; Debian bug #499273
+
+ -- Steve Kemp <steve@steve.org.uk>  Sun, 19 Oct 2008 15:11:51 +0000
+
+tscreen (0.2.0-1) unstable; urgency=low
+
+  * Added:
+    - Complex aliases
+    - New primitive "aliaslist"
+  * Removed:
+    - Nethack mode.
+
+ -- Steve Kemp <steve@steve.org.uk>  Sun, 19 Oct 2008 01:02:03 +0000
+
+tscreen (0.1.0-1) unstable; urgency=low
+
+  * Initial package.
+
+ -- Steve Kemp <steve@steve.org.uk>  Fri, 17 Oct 2008 22:22:22 +0000

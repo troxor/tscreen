@@ -1,0 +1,162 @@
+#
+# This is the system-wide /etc/tscreenrc file, which is loaded when
+# tscreen starts.
+#
+# It may be over-ridden by ~/.tscreenrc on a per-user basis if that
+# is desired.
+#
+# Steve
+# --
+#
+
+
+
+
+###
+#
+#    [1/4] Look & Feel Defaults.
+##
+###########################################################################
+
+#
+#  Show the startup message by default
+#
+startup_message on
+
+#
+#  Show basic info to each user.
+#
+hardstatus alwayslastline '[^^ac]: New window   [^^an]: Next window   [^^ad]: Disconnect   [^^aq]: Quit'
+
+#
+#  Along with all open windows.
+#
+caption always "%?%{yk}%-Lw%?%{wb}%n*%f %t%?(%u)%?%?%{yk}%+Lw%?"
+
+
+
+
+
+
+###
+#
+#    [2/4] System Settings
+##
+###########################################################################
+
+
+
+#
+# detach on hangup - this is more useful than the alternative.
+#
+autodetach on
+
+#
+# have a large scroll-back buffer by default
+#
+defscrollback 32768
+
+#
+#  Save layouts on detach
+#
+layout new default
+
+
+#
+#  Idle handling.
+#
+#
+#  If we have cmatrix then :
+#
+#   If we're idle for more than 420 seconds :
+#    - find/create the window titled 'cmatrix'
+#    - run cmatrix in it.
+#
+if -x /usr/bin/cmatrix 'idle 420 eval "screen -F -t cmatrix /usr/bin/cmatrix -f -o -u 10"'
+
+
+
+###
+#
+#    [3/4] System Aliases
+##
+###########################################################################
+
+
+#
+#  Caption toggle
+#
+alias caption_off  eval "caption splitonly"
+alias caption_on   eval "caption always"
+
+
+#
+#  Statusbar toggle
+#
+alias status_off   eval "hardstatus ignore"
+alias status_on    eval "hardstatus alwayslastline"
+
+
+#
+#  Disable both caption and status, and show a message.
+#
+alias fullscreen   eval "status_off" "caption_off" "echo 'fullscreen - \"Ctrl-a F\" to return'"
+alias captioned    eval "status_on"  "caption_on"  "echo 'captioned - \"Ctrl-a f\" for fullscreen'"
+
+
+#
+#  Clear the scrollback history, and the current screen
+#
+alias clearboth eval "scrollback 0" "clear" "scrollback 15000" "echo cleared"
+
+
+#
+#  Run mutt in a window, creating it if it doesn't already exist.
+#
+alias mail screen -F -t mutt mutt
+
+#
+#  View the web in a window.
+#
+alias web screen -F -t web links
+
+
+
+
+###
+#
+#    [4/4] System Keybindings
+##
+###########################################################################
+
+
+#
+#  We bind these explicitly since we refer to it in the footer text.
+#
+bind q  quit
+bind ^Q quit
+
+
+
+###
+#
+#  These next sections refer to aliases we defined above.
+#
+######
+#
+#  Toggle between full-screen and captioned modes.
+#
+#  bind f eval fullscreen
+#  bind F eval captioned
+#
+#
+#  Clear screen & scroll-back
+#
+#  bind C eval clearboth
+#
+#
+#  Web + Mail
+#
+#  bind w eval web
+#  bind m eval mail
+#

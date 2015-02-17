@@ -1,0 +1,23 @@
+Source: tscreen
+Section: shells
+Priority: optional
+Maintainer: Steve Kemp <steve@steve.org.uk>
+Standards-Version: 3.8.0
+Homepage: http://www.steve.org.uk/Software/tscreen/
+Build-Depends: libncursesw5-dev, texinfo, libpam0g-dev, debhelper
+
+Package: tscreen
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: terminal multiplexor with VT100/ANSI terminal emulation
+ tscreen is a terminal multiplexor that runs several separate "screens" on a
+ single physical character-based terminal.
+ .
+ tscreen is a fork of GNU Screen, and inherits all the features and
+ standard facilities you would expect from that program in addition to
+ some more of its own.
+ .
+ The tscreen homepage is located at:
+ .
+ * http://www.steve.org.uk/Software/tscreen/
+

@@ -1,0 +1,73 @@
+Installation of tscreen
+
+1.) Configuration
+-----------------------------
+Create a build directory, change to it, and run cmake <path-to-source>
+
+  mkdir ./build ; (cd build ; cmake ..)
+
+
+If the defaults look okay to you, proceed. Otherwise, use the CMake TUI
+to fine-tune installation options.
+
+  ccmake ..
+
+2.) Actually compiling
+-----------------------
+Type make!
+
+  make
+
+
+3.) where to install
+--------------------
+You may well run tscreen from your private binary directory and with a
+private socket directory like $HOME/.tscreen. But to have a full featured
+tscreen and (from a users point of view) more secure pty's you should
+consult a system administrator and discuss installing tscreen setuid-root
+in some globally accessible directory like /usr/local/bin.
+
+Consider this, when deciding whether you install tscreen setuid-root:
+- On some machines root privileges are required to open pty's.
+- Pty's should be owned by the user, so that she can do chmod to prevent
+  intruder attacks. The PTYs used by tscreen will remain world read-writable
+  if tscreen is not installed setuid-root.
+- Some commands only work properly when the pty is owned by the user.
+  These include mesg and biff.
+- The ^At feature may need to lseek and read the kernel file to retrieve
+  the load average.
+- On most machines utmp slots can only be created/manipulated with root
+  privileges. Users will appear to be logged on the primary terminal
+  instead of the tscreen windows, if tscreen is not installed setuid-root.
+- Multi-user tscreen sessions are only allowed when tscreen has a root-s-bit.
+- If tscreen sockets of multiple users are kept in one directory (e.g.
+  /tmp/screens), this directory must be world writable when tscreen is not
+  installed setuid-root. Any user can remove or abuse any socket then.
+
+
+4.) doc/tscreen.1 & doc/tscreen.texinfo
+-------------------------------------
+The man page doc/tscreen.1 should go to /usr/local/man/man1, or some similar
+directory. It should format nicely with nroff -man. If it does not, then
+try removing extra dots with: sed -e 's/^\.\././' < tscreen.1 | nroff -man
+The info page doc/tscreen.texinfo contains basically the same information as
+the man-page, we may have missed one or another thing in one of the files.
+If so, e-mail me.
+
+5.) Config files
+----------------------------------
+The file data/tscreenrc are instructive samples that
+demonstrate what can and/or should be done from your private .tscreenrc and from
+$ETCTSCREENRC -- do not just copy them. Read them.  Look through the
+etctscreenrc file for system wide defaults that you like to set. e.g.
+autodetach off, startup_message off, vbell on, ...
+
+6.) terminfo/screeninfo.src & terminfo/screencap
+------------------------------------------------
+Every now and then we update the termcap/terminfo entries for tscreen.
+E.g. keycodes were added in 3.6.0 -- thus you check that your termcap/terminfo
+database is up to date. See the README in the terminfo subdirectory.
+
+7.) have fun
+------------
+To get an idea what the basic tscreen commands are, read the file README.

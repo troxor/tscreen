@@ -1,0 +1,88 @@
+#!/usr/bin/make -f
+#
+# Copyright (C) 1997 joost witteveen <joost@rulcmc.leidenuniv.nl>
+# Copyright (C) 1997-2001 Juan Cespedes <cespedes@debian.org>
+# Copyright (C) 2001 Adam Lazur <zal@debian.org>
+
+# Uncomment me to turn on debugging
+#export DH_VERBOSE=1
+
+package := tscreen
+ROOT := $(CURDIR)/debian/$(package)
+# statically define this... sucko
+TTYGROUP := 5
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f configure-stamp build-stamp
+	test ! -s doc/Makefile || $(MAKE) -C doc realclean
+	test ! -s Makefile || ! grep -q clean Makefile || $(MAKE) realclean
+	rm -f config.log config.status Makefile
+	dh_clean
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	if [ ! -x ./configure ]; then ./autogen.sh; fi
+	CFLAGS=-O   ./configure --prefix=/usr \
+		    --infodir='$$(prefix)/share/info' \
+		    --mandir='$$(prefix)/share/man' \
+		    --with-socket-dir=/var/run/tscreen \
+		    --enable-pam \
+		    --enable-telnet \
+		    --with-pty-mode=0620 \
+		    --with-pty-group=${TTYGROUP} \
+		    --enable-rxvt_osc \
+		    --with-sys-screenrc=/etc/tscreenrc \
+		    --enable-colors256
+	# Assert the use of fifos instead of sockets
+	grep -q "define.*NAMEDPIPE.*1" config.h || echo "#define NAMEDPIPE 1" >> config.h
+	touch $@
+
+build: build-stamp
+build-stamp: configure
+	dh_testdir
+	$(MAKE) CFLAGS+='-O2 -g -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers'
+	$(MAKE) CFLAGS+='-O2 -g -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers' -C doc
+	touch $@
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean
+	dh_installdirs
+	# can't call the normal install target b/c it installs the info files
+	# and other crud
+	$(MAKE) prefix=$(ROOT)/usr SCREENENCODINGS='$$(prefix)/share/tscreen/utf8encodings' installdirs install_bin
+	# install the debian screenrc to etc
+	install -m 644 etc/tscreenrc $(ROOT)/etc/tscreenrc
+	# include completion
+	install -m 644 etc/bash_completion $(ROOT)/etc/bash_completion.d/tscreen
+	# hack around the fact that the install target makes screen a symlink to screen-$$(VERSION)
+	rm -f $(ROOT)/usr/bin/tscreen
+	mv -f $(ROOT)/usr/bin/tscreen* $(ROOT)/usr/bin/tscreen
+	# make it setgid utmp
+	chown root:utmp $(ROOT)/usr/bin/tscreen
+	chmod 2755 $(ROOT)/usr/bin/tscreen
+
+binary: binary-arch
+binary-indep: build install
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installman || true
+	dh_installinfo
+	dh_installchangelogs -k patchlevel.h
+	dh_installinit --no-start --init-script='tscreen-cleanup' --update-rcd-params='start 70 S .'
+	dh_strip
+	dh_compress
+	dh_fixperms -X/usr/bin/tscreen
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+.PHONY: configure build clean binary-indep binary-arch binary install

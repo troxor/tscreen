@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = configure ]; then
+
+    #
+    #  Make sure we have the directory we need.
+    #
+    if [ ! -d /var/run/tscreen ] ; then
+        install -g utmp -m 0775 -d /var/run/tscreen
+        [ `stat -c%a /usr/bin/tscreen` -lt 4000 ] || chmod 0755 /var/run/tscreen
+    fi
+
+    #
+    #  Add the tscreen program as a shell.
+    #
+    add-shell /usr/bin/tscreen || true
+fi
+
+#DEBHELPER#
